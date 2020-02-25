@@ -1,0 +1,122 @@
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Приложение</title>
+</head>
+
+<body>
+<style>
+    #topsearch {
+    text-align: center;
+    }
+    #videobox {
+    width: 640px;
+    margin: auto;
+    }
+
+    #my-video, #vidsrc {
+    transition: 0.5s;
+    }
+
+
+</style>
+<form>
+        <p id="topsearch">
+            <input id="searchInput" type="search" name="tag" placeholder="Поиск по сайту">
+            <input type="submit" value="Найти">
+        </p>
+    </form>
+  <div class="player">
+      <video autoplay
+    id="my-video"
+    class="video-js"
+    preload="auto"
+    width="2500"
+    height="564"
+    data-setup="{}"
+
+             >
+    <source id="vidsrc" src="https://media1.giphy.com/media/dsWOUTBz5aae8ET8Ss/giphy.mp4?cid=790b7611ba999347f2511dbd64e866f5be01394a3d1a542f&;rid=giphy.mp4" type="video/mp4"/>
+    <p class="vjs-no-js">
+      To view this video please enable JavaScript, and consider upgrading to a
+      web browser that
+      <a href="https://videojs.com/html5-video-support/" target="_blank"
+        >supports HTML5 video</a
+      >
+    </p>
+  </video>
+</div>
+
+<iframe id="audioFrame" src="https://open.spotify.com/embed/track/5BmIf8J2668S9WfiVCnRID" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe></body>
+
+
+<script>
+
+var myHeaders = new Headers();
+myHeaders.append('frame-ancestors', 'none');
+myHeaders.set('frame-ancestors', 'none');
+
+var videos = {{ videos|tojson }};
+var videoPlay = document.querySelector('#my-video');
+var currentIndex = 0;
+function playVideo(){
+    if(!videos[0][currentIndex]){
+        currentIndex = 0;
+    }
+    videoPlay.src = videos[0][currentIndex];
+    if (currentIndex % 2 == 0) {
+    videoPlay.style.transform = "translate(20px)"
+    } else {
+    videoPlay.style.transform = "translate(-20px)"
+    };
+    videoPlay.play();
+    currentIndex++;
+}
+
+<!--var audios = {audios}-->
+var audioPlay = document.querySelector('#audioFrame');
+console.log('audioPlay');
+var audioIndex = 0;
+function playAudio(){
+    if(!videos[1][audioIndex]){
+        audioIndex = 0;
+    }
+    audioPlay.src = videos[1][audioIndex];
+    console.log(audioPlay);
+<!--    audioPlay.play();-->
+    audioIndex++;
+}
+
+document.onload = function(){
+    playVideo();
+}
+
+videoPlay.addEventListener('ended', function() {
+    playVideo();
+});
+
+
+
+let search = document.querySelector('#searchInput')
+let pauseFlag = 0
+search.addEventListener('keydown', function () {
+    videoPlay.pause();
+    pauseFlag = 1;
+    playAudio();
+
+});
+
+document.addEventListener('click', function () {
+    if (pauseFlag = 1) {
+    videoPlay.play();
+    pauseFlag = 0;
+    }
+})
+
+
+
+
+
+</script>
+
+</html>
